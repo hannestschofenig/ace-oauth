@@ -49,7 +49,7 @@ C:  +-------->| Header: PUT (Code=0.02)
     .         .
     |         |
 F:  |<--------+ Header: 2.04 Changed
-    | 2.04    | Object-Security:
+=    | 2.04    | Object-Security:
     |         |    (<seq>,<cid>,,<tag>)
     |         |
                     ]]></artwork>
@@ -82,3 +82,522 @@ F:  |<--------+ Header: 2.04 Changed
        \-----------+--------------+-------------------------/
       ]]></artwork>
     </figure></t>
+
+================================================================================
+
+    <t>CoAP specifies three security modes of DTLS: PreSharedKey, RawPublicKey
+    and Certificate.  The same modes can be used with TLS.  The client is to
+    infer from the type of key provided, which (D)TLS mode the RS supports as
+    follows.</t>
+
+    <t>If PreSharedKey mode is used, the AS MUST provide the client with 
+    the pre-shared key to be used with the RS.  This key MUST be the same as
+    the PoP key (i.e. a symmetric key as in section 4 of <xref
+    target="I-D.ietf-oauth-pop-key-distribution"/>).</t>
+
+    <t>The client MUST use the PoP key as DTLS pre-shared key.  The client 
+    MUST furthermore use the "kid" parameter provided as part of the 
+    JWK/COSE_Key as the psk_identity in the DTLS handshake <xref 
+    target="RFC4279"/>.  How the AS and the RS determine the values of the kid
+    parameter is out of scope for this specification, but the AS MUST use a
+    kid that makes it possible for the RS to select the correct key.</t>
+    
+    <t>If RawPublicKey mode is used, the AS MUST provide the client with 
+    the RS's raw public key using the "rpk" parameter defined in the
+    following.  This parameter MUST contain a JWK or a COSE_Key.  The client
+    MUST provide a raw public key to the AS, and the AS MUST use this key as
+    PoP key in the token.  The token MUST thus use asymmetric keys for the 
+    proof-of-possession.  Note that the PoP key distribution specification
+    <xref target="I-D.ietf-oauth-pop-key-distribution"/> defines how the
+    client can transfer its key as a JWK datastructure.  This specification
+    RECOMMENDS to use a COSE_Key structure instead.  This specification refers
+    to section 9.1.3.2.1. of CoAP <xref target="RFC7252"/> for recommendations
+    on how to generate the kid for a raw public key.</t>
+    
+    <t>In order to get the proof-of-possession a RS configured to use this
+    mode together with PoP tokens MUST require client authentication in the 
+    DTLS handshake.  The client MUST use the raw public key bound to the
+    PoP token for client authentication in DTLS.</t>    
+  
+    <t>TLS or DTLS with certificates MAY make use of pre-established trust
+    anchors or MAY be configured more tightly with additional client
+    information parameters, such as x5c, x5t, or x5t#S256. An overview of
+    these parameters is given below.</t>
+
+    <t hangText="X.509 Certificate Chain (x5c)"><vspace blankLines="1"/>
+    For when communication security is based on certificates this attribute
+    can be used to define the server certificate or CA certificate.
+    Semantics for this attribute is defined by <xref target="RFC7517"/> or
+    COSE_Key <xref target="I-D.ietf-cose-msg"/>.</t>
+   
+    <t hangText="X.509 Certificate Thumbprint (x5t and x5t#S256)">
+    <vspace blankLines="1"/>
+    For when communication security is based on certificates this attribute
+    can be used to define the specific server certificate to expect or the CA
+    certificate.  Semantics for this attribute is defined by JWK/COSE_Key.</t>
+                   
+    <t>To use object security (such as OSCOAP and OSCON) requires security
+    context to be established, which can be provisioned with PoP token and
+    client information, or derived from that information. Object security
+    specifications designed to be used with this protocol MUST specify the
+    parameters that an AS has to provide to the client in order to set up
+    the necessary security context.</t>
+  
+    <t>Table <xref target="tab:cspSummary"/> summarizes the additional
+    parameters defined here for use by the client or the AS in the
+    PoP token request protocol.</t>
+    <t><figure align="center" anchor="tab:cspSummary"
+               title="Table of additional parameters defined for the
+		      PoP protocol.">
+      <artwork align="left"><![CDATA[
+   /-----------+--------------+----------------------------------\
+   | Parameter | Used by      | Description                      |
+   |-----------+--------------+----------------------------------|
+   | csp       | client or AS | Communication security protocol  |
+   | rpk       | AS           | RS's raw public key              |
+   | x5c       | AS           | RS's X.509 certificate chain     |
+   | x5t       | AS           | RS's SHA-1 cert thumb print      |
+   | x5t#S256  | AS           | RS's SHA-256 cert thumb print    |
+   \-----------+--------------+----------------------------------/
+      ]]></artwork>
+    </figure></t>
+===================================================================================
+
+  <section anchor="oauth2ProfilesCoAPAccessTokenOption"
+           title="CoAP Access-Token Option">
+    <t> OAuth 2.0 access tokens are usually transferred as authorization 
+    	header. CoAP has no authorization header equivalence. This document 
+    	therefor register the option Access-Token. The Access-Token option 
+    	is an alternative for transferring the access token when it is smaller 
+    	then 255 bytes. If token is larger the 255 bytes lager authorization 
+    	information resources MUST at the RS be user when CoAP.
+    </t>
+  </section>
+===================================================================================
+
+<section anchor="aifsection"
+    title="Authorization Information Format">
+    <t>We introduce a new claim for describing access rights with a specific 
+    format, the "aif" claim.  In this memo we propose to use the compact 
+    format provided by AIF  <xref target="I-D.bormann-core-ace-aif" />.  Access 
+    rights may be specified as a list of URIs of resources together with allowed 
+    actions (GET, POST, PUT, PATCH, or DELETE).  Other formats may be mandated
+    by specific applications or requirements (e.g. specifying local conditions
+    on access).
+    </t>
+</section>
+
+===================================================================================
+
+      <t>The RS and the AS both store a sequence number linked to their common
+      security association.  The AS increments this number for each access
+      token it issues and includes it in the access token, which is a
+      CWT/JWT.  The RS keeps track of the most recently received sequence
+      number, and only accepts tokens as valid, that are in a certain range
+      around this number.  This method does only require the RS to keep track
+      of the sequence number.  The method does not provide timely expiration,
+      but it makes sure that older tokens cease to be valid after a specified
+      number of newer ones got issued.  For a constrained RS with no network
+      connectivity and no means of reliably measuring time, this is the best
+      that can be achieved.</t> 
+===================================================================================
+   <section anchor="CoAPOptionNumberRegistration" title="CoAP Option Number Registration">
+      	<t>
+      		This section registers the "Access-Token" CoAP Option Number [RFC2046] in
+      		"CoRE Parameters" sub-registry "CoAP Option Numbers" in the manner described
+      		in [RFC7252].
+      	</t>
+        <t>
+          <list style="hanging">
+            <t hangText="Name"><vspace blankLines="1"/>
+              Access-Token
+           </t>
+            <t hangText="Number"><vspace blankLines="1"/>
+              TBD
+            </t>
+            <t hangText="Reference"><vspace blankLines="1"/>
+              [draft-ietf-ace-oauth-authz]
+            </t>
+            <t hangText="Meaning in Request"><vspace blankLines="1"/>
+              Contains an Access Token according to [draft-ietf-ace-oauth-authz] 
+              containing access permissions of the client.
+            </t>
+            <t hangText="Meaning in Response"><vspace blankLines="1"/>
+              Not used in response
+            </t>
+            <t hangText="Safe-to-Forward"><vspace blankLines="1"/>
+              TBD
+            </t>
+            <t hangText="Format"><vspace blankLines="1"/>
+              Based on the observer the format is perseved differently. 
+              Opaque data to the client and CWT or reference token to the RS.
+            </t>
+            <t hangText="Length"><vspace blankLines="1"/>
+              Less then 255 bytes
+            </t>
+          </list>
+        </t>
+      </section>
+===================================================================================
+     <section anchor="app:cborMappingsForOAuth2Properties"
+      title="CoAP and CBOR profiles for OAuth 2.0">
+
+      <t>
+        Many IoT devices can support OAuth 2.0 without any additional
+        extensions, but for certain constrained settings additional profiling
+        is needed.  In this appendix we define CoAP resources for the HTTP based
+        token and introspection endpoints used in vanilla OAuth 2.0.  We also
+        define a CBOR alternative to the JSON and form based POST structures
+        used in HTTP.
+      </t>
+
+ <section anchor="tokenResource"
+       title="Profile for Token resource">
+
+       <t>The token resource is used by the client to obtain an access token by
+       presenting its authorization grant or client credentials to the /token
+       resource the AS.</t>
+
+         <section anchor="tokenResourceRequest"
+           title="Token Request">
+           <t>The client makes a request to the token
+             resource by sending a CBOR structure with the following
+             attributes.</t>
+           <t>
+             <list style="hanging">
+               <t hangText="grant_type:"><vspace blankLines="1"/>
+                REQUIRED.  The grant type, "code",  "client_credentials",
+                "password" or others.
+               </t>
+               <t hangText="client_id:"><vspace blankLines="1"/>
+               OPTIONAL.  The client identifier issued to the holder of the
+               token (client or RS) during the registration process.
+               </t>
+               <t hangText="client_secret:"><vspace blankLines="1"/>
+               OPTIONAL.  The client secret.
+               </t>
+               <t hangText="scope:"><vspace blankLines="1"/>
+               OPTIONAL.  The scope of the access request as described by
+               <xref target="oauth2Overview" />.
+               </t>
+               <t hangText="aud:"><vspace blankLines="1"/>
+                OPTIONAL.  Service-specific string identifier
+                 or list of string identifiers representing the intended
+                 audience for this token, as defined in 
+                 <xref target="I-D.wahlstroem-ace-cbor-web-token"/>.
+               </t>
+               <t hangText="alg:"><vspace blankLines="1"/>OPTIONAL.  The value
+               in the 'alg' parameter together with value from the
+               'token_type' parameter allow the client to indicate the supported
+               algorithms for a given token type.
+               </t>
+               <t hangText="key:"><vspace blankLines="1"/>
+                OPTIONAL.  This field contains information
+                 about the public key the client would like to bind to the
+                 access token in the COSE Key Structure format.
+               </t>
+             </list>
+           </t>
+
+           <t>The parameters defined above use the following CBOR major
+           types.</t>
+
+           <t>
+             <figure align="center" anchor="fig:cborTokenMappingRequest"
+               title="CBOR mappings used in token requests">
+               <artwork align="left"><![CDATA[
+     /-----------+--------------+-----------------------\
+     | Value     | Major Type   | Key                   |
+     |-----------+--------------+-----------------------|
+     | 0         | 0            | grant_type            |
+     | 1         | 0            | client_id             |
+     | 2         | 0            | client_secret         |
+     | 3         | 0            | scope                 |
+     | 4         | 0            | aud                   |
+     | 5         | 0            | alg                   |
+     | 6         | 0            | key                   |
+     \-----------+--------------+-----------------------/
+               ]]></artwork>
+             </figure>
+           </t>
+         </section>
+
+         <section anchor="tokenResourceResponse"
+           title="Token Response">
+
+           <t>The AS responds by sending a CBOR structure with the following
+             attributes.</t>
+
+           <t>
+             <list style="hanging">
+
+               <t hangText="access_token:"><vspace blankLines="1"/>
+                 REQUIRED.  The access token issued by the authorization server.
+               </t>
+
+               <t hangText="token_type:"><vspace blankLines="1"/>
+                 REQUIRED.  The type of the token issued. "pop" is recommended.
+               </t>
+
+              <t hangText="key:"><vspace blankLines="1"/>
+                REQUIRED, if symmetric key cryptography is used.  A COSE Key
+                Structure containing the symmetric proof of possession key.  The
+                members of the structure can be found in section 7.1 of
+                <xref target="I-D.ietf-cose-msg" />.
+              </t>
+
+              <t hangText="csp:"><vspace blankLines="1"/>
+                REQUIRED.  Information on what communication protocol to use
+                in the communication between the client and the RS.  Details on
+                possible values can be found in
+                <xref target="oauth2ProfilesCSP" />.
+              </t>
+
+               <t hangText="scope:"><vspace blankLines="1"/>
+                 OPTIONAL, if identical to the scope requested by the client;
+                 otherwise, REQUIRED.
+               </t>
+
+               <t hangText="alg:"><vspace blankLines="1"/>
+                 OPTIONAL.  The 'alg' parameter provides further information
+                 about the algorithm, such as whether a symmetric or an
+                 asymmetric crypto-system is used.
+               </t>
+
+             </list>
+           </t>
+
+           <t>The parameters defined above use the following CBOR major 
+           types.</t>
+
+            <t>
+              <figure align="center" anchor="fig:cborTokenMappingResponse"
+                title="CBOR mappings used in token responses">
+                <artwork align="left"><![CDATA[
+      /-----------+--------------+-----------------------\
+      | Value     | Major Type   | Key                   |
+      |-----------+--------------+-----------------------|
+      | 0         | 0            | access_token          |
+      | 1         | 0            | token_type            |
+      | 2         | 0            | key                   |
+      | 3         | 0            | csp                   |
+      | 4         | 0            | scope                 |
+      | 5         | 0            | alg                   |
+      \-----------+--------------+-----------------------/
+                ]]></artwork>
+              </figure>
+            </t>
+         </section>
+       </section>
+
+===================================================================================
+
+    <section anchor="introspectionResource"
+         title="CoAP Profile for OAuth Introspection">
+
+         <t>This section defines a way for a holder of access tokens, mainly
+           clients and RS's, to get metadata like validity status, claims and
+           scopes found in access token.  The OAuth Token Introspection
+           specification <xref target="I-D.ietf-oauth-introspection"/> defines
+           a way to validate the token using HTTP POST or HTTP GET.
+           This document reuses the work done in the OAuth Token Introspection
+           and defines a mapping of the request and response to CoAP
+           <xref target="RFC7252"/> to be used by constrained devices.</t>
+
+           <section anchor="introspectionResourceRequest"
+             title="Introspection Request">
+             <t>The token holder makes a request to the Introspection CoAP
+               resource by sending a CBOR structure with the following
+               attributes.</t>
+             <t>
+               <list style="hanging">
+                 <t hangText="token:"><vspace blankLines="1"/>
+                 REQUIRED.  The string value of the token.
+                 </t>
+                 <t hangText="resource_id:"><vspace blankLines="1"/>
+                  OPTIONAL.  A service-specific string identifying the resource
+                  that the client doing the introspection is asking about.
+                 </t>
+                 <t hangText="client_id:"><vspace blankLines="1"/>
+                   OPTIONAL.  The client identifier issued to the holder of the 
+                   token (client or RS) during the registration process.
+                 </t>
+                 <t hangText="client_secret:"><vspace blankLines="1"/>
+                 OPTIONAL.  The client secret.
+                 </t>
+               </list>
+             </t>
+
+             <t>The parameters defined above use the following CBOR major 
+             types:</t>
+
+             <t>
+               <figure align="center" anchor="fig:cborIntrospectionReq"
+                 title="CBOR Mappings to Token Introspection Request Parameters.">
+                 <artwork align="left"><![CDATA[
+       /-----------+--------------+-----------------------\
+       | Value     | Major Type   | Key                   |
+       |-----------+--------------+-----------------------|
+       | 0         | 0            | token                 |
+       | 1         | 0            | resource_id           |
+       | 2         | 0            | client_id             |
+       | 3         | 0            | client_secret         |
+       \-----------+--------------+-----------------------/
+                 ]]></artwork>
+               </figure>
+             </t>
+<!-- 
+             <t>FIXME: Fix better mappings to CBOR.</t>
+--> 
+           </section>
+
+           <section anchor="introspectionResourceResponse"
+             title="Introspection Response">
+
+              <t>If the introspection request is valid and authorized, the
+              authorization server returns a CoAP message with the response 
+              encoded as a CBOR structure in the payload of the message.  If the
+              request failed client authentication or is invalid, the
+              authorization server returns an error response using the CoAP 4.00 
+              'Bad Request' response code.</t>
+
+             <t>The JSON structure in the payload response includes the top-level
+               members defined in Section 2.2 in the OAuth Token Introspection
+               specification <xref target="I-D.ietf-oauth-introspection"/>.
+               It is RECOMMENDED to only return the 'active' attribute 
+               considering constrained nature of CoAP client and server 
+               networks.</t>
+
+             <t>Introspection responses in CBOR use the following
+               mappings:</t>
+
+             <t>
+               <list style="hanging">
+
+                 <t hangText="active:"><vspace blankLines="1"/>
+                   REQUIRED.  The active key is an indicator of whether or not
+                   the presented token is currently active.  The specifics of a
+                   token's "active" state will vary depending on the 
+                   implementation of the authorization server, and the
+                   information it keeps about its tokens, but a "true" value
+                   return for the "active" property will generally indicate that 
+                   a given token has been issued by this authorization server, 
+                   has not been revoked by the resource owner, and is within its
+                   given time window of validity (e.g., after its
+                   issuance time and before its expiration time).
+                 </t>
+
+                 <t hangText="scope:"><vspace blankLines="1"/>
+                   OPTIONAL.  A string containing a space-separated list of
+                  scopes associated with this token, in the format described in
+                  Section 3.3 of OAuth 2.0 <xref target="RFC6749" />.
+                 </t>
+
+                <t hangText="client_id:"><vspace blankLines="1"/>
+                  OPTIONAL.  Client identifier for the client that
+                  requested this token.
+                </t>
+
+                <t hangText="username:"><vspace blankLines="1"/>
+                  OPTIONAL.  Human-readable identifier for the resource owner 
+                  who authorized this token.
+                </t>
+
+                <t hangText="token_type:"><vspace blankLines="1"/>
+                  OPTIONAL.  Type of the token as defined in Section 5.1 of
+                  OAuth 2.0 <xref target="RFC6749" /> or PoP token.
+                </t>
+
+                <t hangText="exp:"><vspace blankLines="1"/>
+                  OPTIONAL.  Integer timestamp, measured in the number of 
+                  seconds since January 1 1970 UTC, indicating when this token 
+                  will expire, as defined in CWT 
+                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
+                </t>
+
+                <t hangText="iat:"><vspace blankLines="1"/>
+                  OPTIONAL.  Integer timestamp, measured in the number of
+                  seconds since January 1 1970 UTC, indicating when this token
+                  will expire, as defined in CWT 
+                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
+                </t>
+
+                <t hangText="nbf:"><vspace blankLines="1"/>
+                  OPTIONAL.  Integer timestamp, measured in the number of
+                  seconds since January 1 1970 UTC, indicating when this token 
+                  will expire, as defined in CWT 
+                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
+                </t>
+
+                <t hangText="sub:"><vspace blankLines="1"/>
+                  OPTIONAL.  Subject of the token, as defined in CWT
+                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.  Usually 
+                  a machine-readable identifier of the resource owner who 
+                  authorized this token.
+                </t>
+
+                <t hangText="aud:"><vspace blankLines="1"/>
+                  OPTIONAL.  Service-specific string identifier or list of
+                  string identifiers representing the intended audience for this
+                  token, as defined in CWT 
+                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
+                </t>
+
+                <t hangText="iss:"><vspace blankLines="1"/>
+                  OPTIONAL.  String representing the issuer of this token, as
+                  defined in CWT 
+                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
+                </t>
+
+                <t hangText="cti:"><vspace blankLines="1"/>
+                  OPTIONAL.  String identifier for the token, as defined in CWT
+                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />
+                </t>
+
+               </list>
+             </t>
+
+             <t>The parameters defined above use the following CBOR major 
+             types:</t>
+
+              <t>
+                <figure align="center" anchor="fig:cborIntrospectionResp"
+                  title="CBOR Mappings to Token Introspection Response Parameters.">
+                  <artwork align="left"><![CDATA[
+/-----------+--------------+-----------------------\
+| Value     | Major Type   | Key                   |
+|-----------+--------------+-----------------------|
+| 0         | 0            | active                |
+| 1         | 0            | scopes                |
+| 2         | 0            | client_id             |
+| 3         | 0            | username              |
+| 4         | 0            | token_type            |
+| 5         | 0            | exp                   |
+| 6         | 0            | iat                   |
+| 7         | 0            | nbf                   |
+| 8         | 0            | sub                   |
+| 9         | 0            | aud                   |
+| 10        | 0            | iss                   |
+| 11        | 0            | cti                   |
+\-----------+--------------+-----------------------/
+                  ]]></artwork>
+                </figure>
+              </t>
+<!-- 
+              <t>FIXME: Fix better mappings to CBOR.</t>
+--> 
+           </section>
+
+<!-- 
+           <section anchor="introspectionResourceExample"
+             title="Example">
+             <t>
+               An example of a introspection request done using CoAP and CBOR
+               can be found in <xref target="ExCOff" />
+             </t>
+           </section>
+-->    
+        </section>
+
+    </section>
+===================================================================================

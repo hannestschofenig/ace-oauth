@@ -8,7 +8,6 @@
 
 <!ENTITY RFC2119 SYSTEM
 "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC4279 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4279.xml">
 <!ENTITY RFC4949 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4949.xml">
 <!ENTITY RFC5246 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 <!ENTITY RFC6347 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6347.xml">
@@ -23,11 +22,9 @@
 <!-- <!ENTITY RFC7250 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7250.xml"> -->
 <!ENTITY RFC7252 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7252.xml">
 <!ENTITY RFC7516 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7516.xml">
-<!ENTITY RFC7517 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7517.xml">
 <!ENTITY RFC7519 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7519.xml">
 <!-- <!ENTITY I-D.ietf-ace-usecases SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-ace-usecases.xml"> -->
 <!ENTITY I-D.ietf-oauth-introspection SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-oauth-introspection.xml">
-<!ENTITY I-D.somaraju-ace-multicast SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.somaraju-ace-multicast.xml">
 <!ENTITY I-D.ietf-ace-actors SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-ace-actors.xml">
 <!ENTITY I-D.ietf-cose-msg SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-cose-msg.xml">
 <!ENTITY I-D.selander-ace-object-security SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.selander-ace-object-security.xml">
@@ -35,7 +32,6 @@
 <!ENTITY I-D.ietf-oauth-pop-key-distribution SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-oauth-pop-key-distribution.xml">
 <!ENTITY I-D.wahlstroem-ace-oauth-introspection SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wahlstroem-ace-oauth-introspection.xml">
 <!ENTITY I-D.wahlstroem-ace-cbor-web-token SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wahlstroem-ace-cbor-web-token.xml">
-<!ENTITY I-D.bormann-core-ace-aif SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.bormann-core-ace-aif.xml">
 <!ENTITY I-D.ietf-core-block SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-core-block.xml">
 <!ENTITY I-D.seitz-ace-core-authz SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.seitz-ace-core-authz.xml">
 ]>
@@ -187,11 +183,11 @@
          keywords will be used for the search engine. -->
 
     <abstract>
-      <t>This memo defines how to use OAuth 2.0 as an authorization framework
-      with Internet of Things (IoT) deployments, thus bringing a well-known and
-      widely used security solution to IoT devices.  Where possible vanilla
-      OAuth 2.0 is used, but where the limitations of IoT devices require it,
-      profiles and extensions are provided.
+      <t>This memo defines a framework for using OAuth 2.0 as an authorization
+      solution for Internet of Things (IoT) deployments, thus bringing a
+      well-known and widely used security solution to IoT devices.  Where
+      possible vanilla OAuth 2.0 is used, but where the limitations of IoT
+      devices require it, options for profiles and extensions are provided.
       </t>
     </abstract>
   </front>
@@ -230,14 +226,20 @@ levels in between.  Thus IoT devices are very different in terms of available
 processing and message exchange capabilities.
 </t>
 
-<t>This memo describes how to re-use OAuth 2.0 <xref target="RFC6749"/> to
-extend authorization to Internet of Things devices with different kinds of
-constraints.  At the time of writing, OAuth 2.0 is already used with certain
-types of IoT devices and this document will provide implementers additional
-guidance for using it in a secure and privacy-friendly way.  Where possible the
-basic OAuth 2.0 mechanisms are used; in some circumstances profiles are defined,
-for example to support smaller the over-the-wire message size and
-smaller code size.</t>
+<t>This memo describes a framework for re-using OAuth 2.0 <xref
+target="RFC6749"/> to extend authorization to Internet of Things devices with
+different kinds of constraints.  At the time of writing, OAuth 2.0 is already
+used with certain types of IoT devices and this document will provide
+implementers additional guidance for using it in a secure and privacy-friendly
+way.  Where possible the basic OAuth 2.0 mechanisms are used; in some
+circumstances different options are presented for example to support smaller
+the over-the-wire message size and smaller code size.</t>
+
+<t>Implementing this framework alone will not result in interoperable
+solutions, instead this memo points out the different options available on a
+high level and fully expects separate profile documents to define a 
+selection of these options and how to implement them in detail.</t>
+
 </section>
 
 <!-- ***************************************************** -->
@@ -325,8 +327,8 @@ or the client (see section 2.2 in <xref target="I-D.ietf-ace-actors"/>).
   several different deployment variants to co-exist rather than mandating a
   one-size-fits-all solution.  We believe this is important to cover the wide
   range of possible interworking use cases and the different requirements from 
-  a security point of view.  Once IoT deployments mature, popular deployment
-  variants will be documented in form of profiles.</t>
+  a security point of view.  We fully expect ancilliary documents to define
+  deployment variants on an interoperable level based on this framework.</t>
 
   <t>In the subsections below we provide further details about the different
   building blocks.</t>
@@ -408,10 +410,9 @@ or the client (see section 2.2 in <xref target="I-D.ietf-ace-actors"/>).
          seeking to obtain (via the scope parameter) in the access request.  In
          turn, the AS may use the "scope" response parameter to inform the
          client of the scope of the access token issued.  As the client could
-	 be a constrained device as well, this memo uses CBOR encoded messages 
-         defined in <xref target="app:cborMappingsForOAuth2Properties" /> to 
-         request scopes and to be informed what scopes the access token was 
-         actually authorized for by the AS.
+	 be a constrained device as well, this memo allows CBOR encoded
+	 messages to be used for requesting  scopes and to be informed what
+	 scopes the access token was actually authorized for by the AS.
          <vspace blankLines="1"/>
          The values of the scope parameter are expressed as a list of space-
          delimited, case-sensitive strings, with a semantic that is well-known
@@ -540,9 +541,10 @@ or the client (see section 2.2 in <xref target="I-D.ietf-ace-actors"/>).
 
 <t>
     The consent of the resource owner, for giving a client access to a protected
-    resource, can be pre-configured authorization policies or dynamically at the
-    time when the request is sent.  The resource owner and the requesting
-    party (= client owner) are not shown in <xref target="fig:protocolFlow"/>.
+    resource, can be pre-configured authorization policies, or dynamically
+    queried at the time when the request is sent.  The resource owner and the
+    requesting party (= client owner) are not shown in <xref
+    target="fig:protocolFlow"/>. 
 </t>
 
 <t>
@@ -553,11 +555,10 @@ or the client (see section 2.2 in <xref target="I-D.ietf-ace-actors"/>).
   client and the transport of access tokens and client information from AS 
   to the client. </t> 
 
- <t>It is also assumed
-  that the RS has been registered with the AS.  Established keying material 
-between the AS and the RS allows the AS to apply cryptographic protection 
-to the access token to ensure that the content cannot be modified, and if
-needed, that the content is confidentiality protected.</t> 
+ <t>It is also assumed that the RS has been registered with the AS.
+ Established keying material between the AS and the RS allows the AS to apply
+ cryptographic protection to the access token to ensure that the content cannot
+ be modified, and if needed, that the content is confidentiality protected.</t> 
 
 <t>The keying material necessary for establishing communication security
   between C and RS is dynamically established as part of the protocol described 
@@ -616,7 +617,8 @@ needed, that the content is confidentiality protected.</t>
       OAuth 2.0 and the PoP token extension, we consider new kinds of response 
       parameters in <xref target="specsClientInfo"/>, including information on 
       which security protocol the client should use with the resource server(s)
-      that it has just been authorized to access.  Communication security
+      that it has just been authorized to access, and possibly how it should
+      transfer the authorization token to the RS.  Communication security
       between client and RS may be based on pre-provisioned keys/security
       contexts or dynamically established. The RS authenticates the client via 
       the PoP token; and the client authenticates the RS via the client 
@@ -634,12 +636,14 @@ needed, that the content is confidentiality protected.</t>
       exchange may be split up into two phases: 
 
 <list style="empty">
-<t>(1) the client sends the access token
-      to a newly defined authorization endpoint at the RS (see <xref target="oauth2ProfilesAuthzInfo"/>)
-      , which conveys authorization information to the RS that may be used by the client for
-      subsequent resource requests, and </t> 
-<t>(2) the client makes the resource access request, using the communication security protocol and other
-    client information obtained from the AS.</t>
+<t>(1) the client sends the access token to a newly defined authorization
+       endpoint at the RS (see <xref target="oauth2ProfilesAuthzInfo"/>), which
+       conveys authorization information to the RS that may be used by the
+       client for subsequent resource requests, and </t>  
+<t>(2) the client makes the resource access request, using the communication
+       security protocol and other client information obtained from the AS.</t>
+<t>Note that other modes of token transport may be defined by a specific
+       profile.</t> 
 </list> 
 
       <vspace blankLines="1"/>
@@ -685,13 +689,14 @@ needed, that the content is confidentiality protected.</t>
 
 <!-- ***************************************************** -->
 
-<section anchor="specsClientInfo" title="OAuth 2.0 Profiling">
+<section anchor="specsClientInfo" title="OAuth 2.0 Profiling Options">
 
   <t>
-    This section describes profiles of OAuth 2.0 adjusting it to constrained
-    environments for use cases where this is necessary.  Profiling for
-    JSON Web Tokens (JWT) is provided in 
-    <xref target="I-D.wahlstroem-ace-cbor-web-token"/>.
+    This section describes some requirements and several sets of options for
+    profiles of OAuth 2.0.  The options define adjustments for specific
+    deployments in constrained environments.  Profiling for JSON Web Tokens
+    (JWT) to CBOR is provided in <xref
+    target="I-D.wahlstroem-ace-cbor-web-token"/>. 
   </t>
 
 
@@ -716,22 +721,26 @@ needed, that the content is confidentiality protected.</t>
     proof-of-possession (PoP) tokens <xref
     target="I-D.ietf-oauth-pop-key-distribution"/>,  the authors suggest to
     use Uri-query parameters in order to submit the parameters of the client's
-    token request.  To avoid large headers if the client uses CoAP to
+    token request.  Alternatively profiles MAY define the use of CoAP for the
+    token request and response.</t>
+
+<!-- Move to profiles:
+To avoid large headers if the client uses CoAP to
     communicate with the AS, this memo specifies the following alternative for
     submitting client request parameters to the AS: The client encodes the
     parameters of its request as a CBOR map and submits that map as the
     payload of the client request.  The Content-format MUST be
     application/cbor in that case.</t>
+-->
     
-    <t>The OAuth memo further specifies that the AS SHALL use a JSON
+    <t>The OAuth memo further specifies that the AS shall use a JSON
     structure in the payload of the response to encode the response
     parameters.  These parameters include the access token, destined
     for the RS and additional information for the client, such as e.g. the PoP
-    key.  We call this information "client information".  If the client is
-    using CoAP to communicate with the AS the AS SHOULD use CBOR instead of
-    JSON for encoding its response.  The client can explicitly request this
-    encoding by setting the CoAP Accept option in the access token request to
-    "application/cbor".</t>
+    key.  We call this information "client information".  Alternatively
+    profiles MAY define the use of CBOR instead of JSON for encoding this
+    response.  The client can explicitly request this encoding by setting the
+    CoAP Accept option in the access token request to "application/cbor".</t>
 
     <t>If the channel between client and AS is not secure, the whole messages 
     from client to AS and vice-versa MUST be wrapped in JWEs 
@@ -749,13 +758,15 @@ needed, that the content is confidentiality protected.</t>
     target="I-D.ietf-oauth-pop-key-distribution"/> describes in section 6
     how the client can request specific types of keys (symmetric vs. 
     asymmetric) and proof-of-possession algorithms in the PoP token
-    request.  These are used as well in this specification.</t>
+    request.  These are used in the same way in this specification, regardless
+    of encoding (JSON or CBOR).</t>
 
     <t>The client and the RS might not have any prior knowledge about each 
     other, therefore the AS needs to help them to establish a security context 
     or at least a common key.  The AS does this by indicating the
     communication security  protocol parameter "csp" and additional key
-    parameters in the client information.</t>
+    parameters in the client information of the Token Response sent to the
+    client.</t>
     
     <t>The csp parameter specifies how client and RS communication is going to
     be secured based on the keys provided by the AS.  Currently defined values
@@ -767,103 +778,15 @@ needed, that the content is confidentiality protected.</t>
                title="Table of 'csp' parameter value encodings for Client 
 		      Information.">
       <artwork align="left"><![CDATA[
-       /-----------+--------------+-----------------------\
-       | Value     | Major Type   | Key                   |
-       |-----------+--------------+-----------------------|
-       | 0         | 0            | TLS                   |
-       | 1         | 0            | DTLS                  |
-       | 2         | 0            | ObjectSecurity        |
-       \-----------+--------------+-----------------------/
+       /-----------+----------------\
+       | Encoding  |     Value      |
+       |-----------+----------------|
+       | 0         | TLS            |
+       | 1         | DTLS           |
+       | 2         | ObjectSecurity |
+       \-----------+----------------/
       ]]></artwork>
     </figure></t>
-
-    <t>CoAP specifies three security modes of DTLS: PreSharedKey, RawPublicKey
-    and Certificate.  The same modes can be used with TLS.  The client is to
-    infer from the type of key provided, which (D)TLS mode the RS supports as
-    follows.</t>
-
-    <t>If PreSharedKey mode is used, the AS MUST provide the client with 
-    the pre-shared key to be used with the RS.  This key MUST be the same as
-    the PoP key (i.e. a symmetric key as in section 4 of <xref
-    target="I-D.ietf-oauth-pop-key-distribution"/>).</t>
-
-    <t>The client MUST use the PoP key as DTLS pre-shared key.  The client 
-    MUST furthermore use the "kid" parameter provided as part of the 
-    JWK/COSE_Key as the psk_identity in the DTLS handshake <xref 
-    target="RFC4279"/>.  How the AS and the RS determine the values of the kid
-    parameter is out of scope for this specification, but the AS MUST use a
-    kid that makes it possible for the RS to select the correct key.</t>
-    
-    <t>If RawPublicKey mode is used, the AS MUST provide the client with 
-    the RS's raw public key using the "rpk" parameter defined in the
-    following.  This parameter MUST contain a JWK or a COSE_Key.  The client
-    MUST provide a raw public key to the AS, and the AS MUST use this key as
-    PoP key in the token.  The token MUST thus use asymmetric keys for the 
-    proof-of-possession.  Note that the PoP key distribution specification
-    <xref target="I-D.ietf-oauth-pop-key-distribution"/> defines how the
-    client can transfer its key as a JWK datastructure.  This specification
-    RECOMMENDS to use a COSE_Key structure instead.  This specification refers
-    to section 9.1.3.2.1. of CoAP <xref target="RFC7252"/> for recommendations
-    on how to generate the kid for a raw public key.</t>
-    
-    <t>In order to get the proof-of-possession a RS configured to use this
-    mode together with PoP tokens MUST require client authentication in the 
-    DTLS handshake.  The client MUST use the raw public key bound to the
-    PoP token for client authentication in DTLS.</t>    
-  
-    <t>TLS or DTLS with certificates MAY make use of pre-established trust
-    anchors or MAY be configured more tightly with additional client
-    information parameters, such as x5c, x5t, or x5t#S256. An overview of
-    these parameters is given below.</t>
-
-    <t hangText="X.509 Certificate Chain (x5c)"><vspace blankLines="1"/>
-    For when communication security is based on certificates this attribute
-    can be used to define the server certificate or CA certificate.
-    Semantics for this attribute is defined by <xref target="RFC7517"/> or
-    COSE_Key <xref target="I-D.ietf-cose-msg"/>.</t>
-   
-    <t hangText="X.509 Certificate Thumbprint (x5t and x5t#S256)">
-    <vspace blankLines="1"/>
-    For when communication security is based on certificates this attribute
-    can be used to define the specific server certificate to expect or the CA
-    certificate.  Semantics for this attribute is defined by JWK/COSE_Key.</t>
-                   
-    <t>To use object security (such as OSCOAP and OSCON) requires security
-    context to be established, which can be provisioned with PoP token and
-    client information, or derived from that information. Object security
-    specifications designed to be used with this protocol MUST specify the
-    parameters that an AS has to provide to the client in order to set up
-    the necessary security context.</t>
-  
-    <t>Table <xref target="tab:cspSummary"/> summarizes the additional
-    parameters defined here for use by the client or the AS in the
-    PoP token request protocol.</t>
-    <t><figure align="center" anchor="tab:cspSummary"
-               title="Table of additional parameters defined for the
-		      PoP protocol.">
-      <artwork align="left"><![CDATA[
-   /-----------+--------------+----------------------------------\
-   | Parameter | Used by      | Description                      |
-   |-----------+--------------+----------------------------------|
-   | csp       | client or AS | Communication security protocol  |
-   | rpk       | AS           | RS's raw public key              |
-   | x5c       | AS           | RS's X.509 certificate chain     |
-   | x5t       | AS           | RS's SHA-1 cert thumb print      |
-   | x5t#S256  | AS           | RS's SHA-256 cert thumb print    |
-   \-----------+--------------+----------------------------------/
-      ]]></artwork>
-    </figure></t>
-  </section>
-
-  <section anchor="oauth2ProfilesCoAPAccessTokenOption"
-           title="CoAP Access-Token Option">
-    <t> OAuth 2.0 access tokens are usually transferred as authorization 
-    	header. CoAP has no authorization header equivalence. This document 
-    	therefor register the option Access-Token. The Access-Token option 
-    	is an alternative for transferring the access token when it is smaller 
-    	then 255 bytes. If token is larger the 255 bytes lager authorization 
-    	information resources MUST at the RS be user when CoAP.
-    </t>
   </section>
 
 <section anchor="oauth2ProfilesAuthzInfo"
@@ -871,8 +794,7 @@ needed, that the content is confidentiality protected.</t>
     <t>A consequence of allowing the use of CoAP as web transfer protocol
       is that we cannot rely on HTTP specific mechanisms, such as
       transferring information elements in HTTP headers since those are not
-      necessarily gracefully mapped to CoAP.  In case the access token is
-      larger than 255 bytes it should not be sent as a CoAP option.
+      necessarily gracefully mapped to CoAP.
     </t>
     <t>For conveying authorization information to the RS a new resource is 
       introduced to which the PoP tokens can be sent to
@@ -890,26 +812,27 @@ needed, that the content is confidentiality protected.</t>
              title="Authorization Information Request">
     <t>The client makes a POST request to the authorization information
       resource by sending its PoP token as request data.</t>
-    <t>Client MUST send the Content-Format option indicate token format</t>
-    <!-- TODO insert Content-Format -->
+    <t>When using CoAP Client MUST send the Content-Format option indicate
+    token format.  With HTTP the content type parameter MUST be used
+    instead.</t>  
 
     </section>
       <section anchor="authzInfoResourceResponse" 
                title="Authorization Information Response">
-        <t>The RS MUST resonde to a requests to the authorization 
-          information resource. The response MUST match CoAP response 
-          codes according to success or error response section</t>
+        <t>The RS MUST resond to a request to the authorization information
+	resource. The response MUST match CoAP or HTTP response codes according
+	to success or error response section.</t> 
 
       <section anchor="authzInfoResourceSuccessResponse"
                title="Success Response">
-        <t>Successful requests MUST be answered with 2.01 
-          Created to indicate that a "session" for the PoP 
-          Token has been created. No location path is 
-          required to be returned.
+        <t>Successful requests MUST be answered with 2.01 (CoAP) or 201 (HTTP)
+	Created code, to indicate that a "session" for the PoP Token has been
+	created. For CoAP no location path is required to be returned.
         </t>
         <t>
           <figure align="center" anchor="fig:clientRSAuthzInfoSuccess"
-                   title="Authorization Information Resource Success Response">
+                   title="CoAP example for an Authorization Information
+			  Resource Success Response"> 
             <artwork align="left"><![CDATA[
           Resource
   Client   Server
@@ -931,15 +854,17 @@ B:  |<--------+ Header: 2.01 Created
 
       <section anchor="authzInfoResourceErrorResponse"
                title="Error Response">
-        <t>The resource server MUST user appropriate CoAP 
+        <t>The resource server MUST user appropriate CoAP or HTTP
           response code to convey the error to the Client.
-          For request that are not valid, e.g. unknown Content-Format, 
-          4.00 Bad Request MUST be returned. If token is not valid, 
-          e.g. wrong audience, the RS MUST return 4.01 Unauthorized.
+          For request that are not valid, e.g. unknown content-format, 
+          4.00 (CoAP) or 400 (HTTP) Bad Request MUST be returned. If token is
+	  not valid,  e.g. wrong audience, the RS MUST return 4.01 (CoaP) or
+	  401 (HTTP) Unauthorized. 
         </t>
         <t>
           <figure align="center" anchor="fig:clientRSAuthzInfoError"
-                   title="Authorization Information Resource Error Response">
+                   title="CoAP example for an Authorization Information
+			  Resource Error Response"> 
             <artwork align="left"><![CDATA[
           Resource
   Client   Server
@@ -961,19 +886,6 @@ B:  |<--------+ Header: 4.01 Unauthorized
     </section>
   </section>
 
-<section anchor="aifsection"
-    title="Authorization Information Format">
-    <t>We introduce a new claim for describing access rights with a specific 
-    format, the "aif" claim.  In this memo we propose to use the compact 
-    format provided by AIF  <xref target="I-D.bormann-core-ace-aif" />.  Access 
-    rights may be specified as a list of URIs of resources together with allowed 
-    actions (GET, POST, PUT, PATCH, or DELETE).  Other formats may be mandated
-    by specific applications or requirements (e.g. specifying local conditions
-    on access).
-    </t>
-</section>
-
-
 <section anchor="oauth2ProfilesCBOR" title="CBOR Data Formats">
     <t>
         The /token resource (called "endpoint" in OAuth 2.0), defined in Section
@@ -983,11 +895,6 @@ B:  |<--------+ Header: 4.01 Unauthorized
         application/x-www-form-urlencoded.  CoAP payloads cannot be formatted in
         the same way which requires the /token resource on the AS to be 
         profiled.
-        <!-- FIXME: The CoAP specific information could be moved to section 4.
-         -->
-        
-        <xref target="app:cborMappingsForOAuth2Properties" /> defines a 
-        CBOR-based format for sending parameters to the /token resource.
     </t>
 </section>
 
@@ -1005,22 +912,15 @@ B:  |<--------+ Header: 4.01 Unauthorized
       reliably measuring time.</t>
 
       <t>The RS verifies the validity of the token by performing an
-      introspection request as specified in <xref
-      target="introspectionResource"/>.  This requires the RS to have a
-      reliable network connection to the AS and to be able to handle two
-      secure sessions in parallel (C to RS and AS to RS).</t>
+      introspection request.  This requires the RS to have a reliable network
+      connection to the AS and to be able to handle two secure sessions in
+      parallel (C to RS and AS to RS).  How this request is performed for CoAP
+      based deployments will be defined by a specific profile.</t> 
 
-      <t>The RS and the AS both store a sequence number linked to their common
-      security association.  The AS increments this number for each access
-      token it issues and includes it in the access token, which is a
-      CWT/JWT.  The RS keeps track of the most recently received sequence
-      number, and only accepts tokens as valid, that are in a certain range
-      around this number.  This method does only require the RS to keep track
-      of the sequence number.  The method does not provide timely expiration,
-      but it makes sure that older tokens cease to be valid after a specified
-      number of newer ones got issued.  For a constrained RS with no network
-      connectivity and no means of reliably measuring time, this is the best
-      that can be achieved.</t>      
+      <t>The RS and the AS use a sequence number or nonce-based approach. For a
+      constrained RS with no network connectivity and no means of reliably
+      measuring time, this is the best that can be achieved.  Profiles are
+      expected to specify the details of such a solution.</t>      
 
     </list></t>
 </section>
@@ -1044,46 +944,8 @@ B:  |<--------+ Header: 4.01 Unauthorized
     <section anchor="iana" title="IANA Considerations">
       <t>TBD</t>
       <t>FIXME: Add registry over 'csp' values from Figure 2</t>
-      <t>FIXME: Add registry of 'rpk' parameter from section 5.1</t>
-      <t>FIXME: Add registry of 'tktn' values from Figure 3</t>
 
-      <section anchor="CoAPOptionNumberRegistration" title="CoAP Option Number Registration">
-      	<t>
-      		This section registers the "Access-Token" CoAP Option Number [RFC2046] in
-      		"CoRE Parameters" sub-registry "CoAP Option Numbers" in the manner described
-      		in [RFC7252].
-      	</t>
-        <t>
-          <list style="hanging">
-            <t hangText="Name"><vspace blankLines="1"/>
-              Access-Token
-           </t>
-            <t hangText="Number"><vspace blankLines="1"/>
-              TBD
-            </t>
-            <t hangText="Reference"><vspace blankLines="1"/>
-              [draft-ietf-ace-oauth-authz]
-            </t>
-            <t hangText="Meaning in Request"><vspace blankLines="1"/>
-              Contains an Access Token according to [draft-ietf-ace-oauth-authz] 
-              containing access permissions of the client.
-            </t>
-            <t hangText="Meaning in Response"><vspace blankLines="1"/>
-              Not used in response
-            </t>
-            <t hangText="Safe-to-Forward"><vspace blankLines="1"/>
-              TBD
-            </t>
-            <t hangText="Format"><vspace blankLines="1"/>
-              Based on the observer the format is perseved differently. 
-              Opaque data to the client and CWT or reference token to the RS.
-            </t>
-            <t hangText="Length"><vspace blankLines="1"/>
-              Less then 255 bytes
-            </t>
-          </list>
-        </t>
-      </section>
+   
     </section>
 
 
@@ -1131,19 +993,13 @@ B:  |<--------+ Header: 4.01 Unauthorized
 
       &I-D.ietf-oauth-introspection;
 
-      &I-D.bormann-core-ace-aif;
-
       &RFC2119;
-
-      &RFC4279;
 
       &RFC6347;
 
       &RFC7252;
       
       &RFC7516;     
-
-      &RFC7517;
 
     </references>
 
@@ -1153,9 +1009,7 @@ B:  |<--------+ Header: 4.01 Unauthorized
       &RFC7250;
 
 -->
-
-      &I-D.somaraju-ace-multicast; 
-   
+ 
       &I-D.seitz-ace-core-authz;
 
       &I-D.ietf-ace-actors;
@@ -1303,14 +1157,14 @@ B:  |<--------+ Header: 4.01 Unauthorized
 	    <t>Allow Resource Onwers to configure and update access control
 	    policies related to their registered RS'</t>
 	    <t>Expose a service that allows clients to request tokens.</t>
-            <t>Authenticate clients that wishes to request a token.</t>
+            <t>Authenticate clients that wish to request a token.</t>
 	    <t>Process a token requests against the authorization
 	    policies configured for the RS.</t>
-	    <t>Expose a service that allows RS's to submit token introspection
-	    requests.</t>
-	    <t>Authenticate RS's that wishes to get an introspection 
+	    <t>Optionally: Expose a service that allows RS's to submit token
+	    introspection requests.</t>
+	    <t>Optionally: Authenticate RS's that wishes to get an introspection 
 	    response.</t>
-	    <t>Process token introspection requests.</t>
+	    <t>Optionally: Process token introspection requests.</t>
 	    <t>Optionally: Handle token revocation.</t>
           </list>
 	</t>
@@ -1341,8 +1195,7 @@ B:  |<--------+ Header: 4.01 Unauthorized
 		<t>Authenticate towards the RS (this could coincide with the
 		proof of possession process).</t>
 		<t>Transmit the token as specified by the AS (default is to an
-		authorization information resource, alternative options are as
-		a CoAP option or in the DTLS handshake).</t>
+		authorization information resource).</t>
 		<t>Perform the proof-of-possession procedure as specified for
 		the type of used token (this may already have been taken care
 		of through the authentication procedure).</t>
@@ -1386,378 +1239,6 @@ B:  |<--------+ Header: 4.01 Unauthorized
       </list></t>
     </section>
 
-    <section anchor="app:cborMappingsForOAuth2Properties"
-      title="CoAP and CBOR profiles for OAuth 2.0">
-
-      <t>
-        Many IoT devices can support OAuth 2.0 without any additional
-        extensions, but for certain constrained settings additional profiling
-        is needed.  In this appendix we define CoAP resources for the HTTP based
-        token and introspection endpoints used in vanilla OAuth 2.0.  We also
-        define a CBOR alternative to the JSON and form based POST structures
-        used in HTTP.
-      </t>
-
-    <section anchor="tokenResource"
-       title="Profile for Token resource">
-
-       <t>The token resource is used by the client to obtain an access token by
-       presenting its authorization grant or client credentials to the /token
-       resource the AS.</t>
-
-         <section anchor="tokenResourceRequest"
-           title="Token Request">
-           <t>The client makes a request to the token
-             resource by sending a CBOR structure with the following
-             attributes.</t>
-           <t>
-             <list style="hanging">
-               <t hangText="grant_type:"><vspace blankLines="1"/>
-                REQUIRED.  The grant type, "code",  "client_credentials",
-                "password" or others.
-               </t>
-               <t hangText="client_id:"><vspace blankLines="1"/>
-               OPTIONAL.  The client identifier issued to the holder of the
-               token (client or RS) during the registration process.
-               </t>
-               <t hangText="client_secret:"><vspace blankLines="1"/>
-               OPTIONAL.  The client secret.
-               </t>
-               <t hangText="scope:"><vspace blankLines="1"/>
-               OPTIONAL.  The scope of the access request as described by
-               <xref target="oauth2Overview" />.
-               </t>
-               <t hangText="aud:"><vspace blankLines="1"/>
-                OPTIONAL.  Service-specific string identifier
-                 or list of string identifiers representing the intended
-                 audience for this token, as defined in 
-                 <xref target="I-D.wahlstroem-ace-cbor-web-token"/>.
-               </t>
-               <t hangText="alg:"><vspace blankLines="1"/>OPTIONAL.  The value
-               in the 'alg' parameter together with value from the
-               'token_type' parameter allow the client to indicate the supported
-               algorithms for a given token type.
-               </t>
-               <t hangText="key:"><vspace blankLines="1"/>
-                OPTIONAL.  This field contains information
-                 about the public key the client would like to bind to the
-                 access token in the COSE Key Structure format.
-               </t>
-             </list>
-           </t>
-
-           <t>The parameters defined above use the following CBOR major
-           types.</t>
-
-           <t>
-             <figure align="center" anchor="fig:cborTokenMappingRequest"
-               title="CBOR mappings used in token requests">
-               <artwork align="left"><![CDATA[
-     /-----------+--------------+-----------------------\
-     | Value     | Major Type   | Key                   |
-     |-----------+--------------+-----------------------|
-     | 0         | 0            | grant_type            |
-     | 1         | 0            | client_id             |
-     | 2         | 0            | client_secret         |
-     | 3         | 0            | scope                 |
-     | 4         | 0            | aud                   |
-     | 5         | 0            | alg                   |
-     | 6         | 0            | key                   |
-     \-----------+--------------+-----------------------/
-               ]]></artwork>
-             </figure>
-           </t>
-         </section>
-
-         <section anchor="tokenResourceResponse"
-           title="Token Response">
-
-           <t>The AS responds by sending a CBOR structure with the following
-             attributes.</t>
-
-           <t>
-             <list style="hanging">
-
-               <t hangText="access_token:"><vspace blankLines="1"/>
-                 REQUIRED.  The access token issued by the authorization server.
-               </t>
-
-               <t hangText="token_type:"><vspace blankLines="1"/>
-                 REQUIRED.  The type of the token issued. "pop" is recommended.
-               </t>
-
-              <t hangText="key:"><vspace blankLines="1"/>
-                REQUIRED, if symmetric key cryptography is used.  A COSE Key
-                Structure containing the symmetric proof of possession key.  The
-                members of the structure can be found in section 7.1 of
-                <xref target="I-D.ietf-cose-msg" />.
-              </t>
-
-              <t hangText="csp:"><vspace blankLines="1"/>
-                REQUIRED.  Information on what communication protocol to use
-                in the communication between the client and the RS.  Details on
-                possible values can be found in
-                <xref target="oauth2ProfilesCSP" />.
-              </t>
-
-               <t hangText="scope:"><vspace blankLines="1"/>
-                 OPTIONAL, if identical to the scope requested by the client;
-                 otherwise, REQUIRED.
-               </t>
-
-               <t hangText="alg:"><vspace blankLines="1"/>
-                 OPTIONAL.  The 'alg' parameter provides further information
-                 about the algorithm, such as whether a symmetric or an
-                 asymmetric crypto-system is used.
-               </t>
-
-             </list>
-           </t>
-
-           <t>The parameters defined above use the following CBOR major 
-           types.</t>
-
-            <t>
-              <figure align="center" anchor="fig:cborTokenMappingResponse"
-                title="CBOR mappings used in token responses">
-                <artwork align="left"><![CDATA[
-      /-----------+--------------+-----------------------\
-      | Value     | Major Type   | Key                   |
-      |-----------+--------------+-----------------------|
-      | 0         | 0            | access_token          |
-      | 1         | 0            | token_type            |
-      | 2         | 0            | key                   |
-      | 3         | 0            | csp                   |
-      | 4         | 0            | scope                 |
-      | 5         | 0            | alg                   |
-      \-----------+--------------+-----------------------/
-                ]]></artwork>
-              </figure>
-            </t>
-         </section>
-
-<!-- 
-         <section anchor="tokenResourceExample"
-           title="Example">
-           <t>
-             An example of a token request done using CoAP and CBOR
-             can be found in <xref target="ExCOff" />
-           </t>
-         </section>
---> 
-
-      </section>
-
-
-
-      <section anchor="introspectionResource"
-         title="CoAP Profile for OAuth Introspection">
-
-         <t>This section defines a way for a holder of access tokens, mainly
-           clients and RS's, to get metadata like validity status, claims and
-           scopes found in access token.  The OAuth Token Introspection
-           specification <xref target="I-D.ietf-oauth-introspection"/> defines
-           a way to validate the token using HTTP POST or HTTP GET.
-           This document reuses the work done in the OAuth Token Introspection
-           and defines a mapping of the request and response to CoAP
-           <xref target="RFC7252"/> to be used by constrained devices.</t>
-
-           <section anchor="introspectionResourceRequest"
-             title="Introspection Request">
-             <t>The token holder makes a request to the Introspection CoAP
-               resource by sending a CBOR structure with the following
-               attributes.</t>
-             <t>
-               <list style="hanging">
-                 <t hangText="token:"><vspace blankLines="1"/>
-                 REQUIRED.  The string value of the token.
-                 </t>
-                 <t hangText="resource_id:"><vspace blankLines="1"/>
-                  OPTIONAL.  A service-specific string identifying the resource
-                  that the client doing the introspection is asking about.
-                 </t>
-                 <t hangText="client_id:"><vspace blankLines="1"/>
-                   OPTIONAL.  The client identifier issued to the holder of the 
-                   token (client or RS) during the registration process.
-                 </t>
-                 <t hangText="client_secret:"><vspace blankLines="1"/>
-                 OPTIONAL.  The client secret.
-                 </t>
-               </list>
-             </t>
-
-             <t>The parameters defined above use the following CBOR major 
-             types:</t>
-
-             <t>
-               <figure align="center" anchor="fig:cborIntrospectionReq"
-                 title="CBOR Mappings to Token Introspection Request Parameters.">
-                 <artwork align="left"><![CDATA[
-       /-----------+--------------+-----------------------\
-       | Value     | Major Type   | Key                   |
-       |-----------+--------------+-----------------------|
-       | 0         | 0            | token                 |
-       | 1         | 0            | resource_id           |
-       | 2         | 0            | client_id             |
-       | 3         | 0            | client_secret         |
-       \-----------+--------------+-----------------------/
-                 ]]></artwork>
-               </figure>
-             </t>
-<!-- 
-             <t>FIXME: Fix better mappings to CBOR.</t>
---> 
-           </section>
-
-           <section anchor="introspectionResourceResponse"
-             title="Introspection Response">
-
-              <t>If the introspection request is valid and authorized, the
-              authorization server returns a CoAP message with the response 
-              encoded as a CBOR structure in the payload of the message.  If the
-              request failed client authentication or is invalid, the
-              authorization server returns an error response using the CoAP 4.00 
-              'Bad Request' response code.</t>
-
-             <t>The JSON structure in the payload response includes the top-level
-               members defined in Section 2.2 in the OAuth Token Introspection
-               specification <xref target="I-D.ietf-oauth-introspection"/>.
-               It is RECOMMENDED to only return the 'active' attribute 
-               considering constrained nature of CoAP client and server 
-               networks.</t>
-
-             <t>Introspection responses in CBOR use the following
-               mappings:</t>
-
-             <t>
-               <list style="hanging">
-
-                 <t hangText="active:"><vspace blankLines="1"/>
-                   REQUIRED.  The active key is an indicator of whether or not
-                   the presented token is currently active.  The specifics of a
-                   token's "active" state will vary depending on the 
-                   implementation of the authorization server, and the
-                   information it keeps about its tokens, but a "true" value
-                   return for the "active" property will generally indicate that 
-                   a given token has been issued by this authorization server, 
-                   has not been revoked by the resource owner, and is within its
-                   given time window of validity (e.g., after its
-                   issuance time and before its expiration time).
-                 </t>
-
-                 <t hangText="scope:"><vspace blankLines="1"/>
-                   OPTIONAL.  A string containing a space-separated list of
-                  scopes associated with this token, in the format described in
-                  Section 3.3 of OAuth 2.0 <xref target="RFC6749" />.
-                 </t>
-
-                <t hangText="client_id:"><vspace blankLines="1"/>
-                  OPTIONAL.  Client identifier for the client that
-                  requested this token.
-                </t>
-
-                <t hangText="username:"><vspace blankLines="1"/>
-                  OPTIONAL.  Human-readable identifier for the resource owner 
-                  who authorized this token.
-                </t>
-
-                <t hangText="token_type:"><vspace blankLines="1"/>
-                  OPTIONAL.  Type of the token as defined in Section 5.1 of
-                  OAuth 2.0 <xref target="RFC6749" /> or PoP token.
-                </t>
-
-                <t hangText="exp:"><vspace blankLines="1"/>
-                  OPTIONAL.  Integer timestamp, measured in the number of 
-                  seconds since January 1 1970 UTC, indicating when this token 
-                  will expire, as defined in CWT 
-                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
-                </t>
-
-                <t hangText="iat:"><vspace blankLines="1"/>
-                  OPTIONAL.  Integer timestamp, measured in the number of
-                  seconds since January 1 1970 UTC, indicating when this token
-                  will expire, as defined in CWT 
-                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
-                </t>
-
-                <t hangText="nbf:"><vspace blankLines="1"/>
-                  OPTIONAL.  Integer timestamp, measured in the number of
-                  seconds since January 1 1970 UTC, indicating when this token 
-                  will expire, as defined in CWT 
-                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
-                </t>
-
-                <t hangText="sub:"><vspace blankLines="1"/>
-                  OPTIONAL.  Subject of the token, as defined in CWT
-                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.  Usually 
-                  a machine-readable identifier of the resource owner who 
-                  authorized this token.
-                </t>
-
-                <t hangText="aud:"><vspace blankLines="1"/>
-                  OPTIONAL.  Service-specific string identifier or list of
-                  string identifiers representing the intended audience for this
-                  token, as defined in CWT 
-                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
-                </t>
-
-                <t hangText="iss:"><vspace blankLines="1"/>
-                  OPTIONAL.  String representing the issuer of this token, as
-                  defined in CWT 
-                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />.
-                </t>
-
-                <t hangText="cti:"><vspace blankLines="1"/>
-                  OPTIONAL.  String identifier for the token, as defined in CWT
-                  <xref target="I-D.wahlstroem-ace-cbor-web-token" />
-                </t>
-
-               </list>
-             </t>
-
-             <t>The parameters defined above use the following CBOR major 
-             types:</t>
-
-              <t>
-                <figure align="center" anchor="fig:cborIntrospectionResp"
-                  title="CBOR Mappings to Token Introspection Response Parameters.">
-                  <artwork align="left"><![CDATA[
-/-----------+--------------+-----------------------\
-| Value     | Major Type   | Key                   |
-|-----------+--------------+-----------------------|
-| 0         | 0            | active                |
-| 1         | 0            | scopes                |
-| 2         | 0            | client_id             |
-| 3         | 0            | username              |
-| 4         | 0            | token_type            |
-| 5         | 0            | exp                   |
-| 6         | 0            | iat                   |
-| 7         | 0            | nbf                   |
-| 8         | 0            | sub                   |
-| 9         | 0            | aud                   |
-| 10        | 0            | iss                   |
-| 11        | 0            | cti                   |
-\-----------+--------------+-----------------------/
-                  ]]></artwork>
-                </figure>
-              </t>
-<!-- 
-              <t>FIXME: Fix better mappings to CBOR.</t>
---> 
-           </section>
-
-<!-- 
-           <section anchor="introspectionResourceExample"
-             title="Example">
-             <t>
-               An example of a introspection request done using CoAP and CBOR
-               can be found in <xref target="ExCOff" />
-             </t>
-           </section>
--->    
-        </section>
-
-    </section>
 
 <!-- ***************************************************** -->
       <section anchor="options" title="Deployment Examples">
@@ -1777,8 +1258,6 @@ B:  |<--------+ Header: 4.01 Unauthorized
 
         <t>Note: CBOR diagnostic notation is used for examples of requests 
           and responses.</t>
-
-<!-- ************************** -->
 
 
  <!-- ************************** -->
@@ -2181,42 +1660,49 @@ F:  |<--------+ Header: 2.04 Changed
     </section>
 
 </section>
-    <section anchor="app:changelog" title="Document Updates">
-      <section anchor="app:f1t2" title="Version -00 to -01">
-	<t><list style="symbols">
-	  <t>Changed 5.1. from "Communication Security Protocol" to "Client
-	  Information".</t> 
-	  <t>Major rewrite of 5.1 to clarify the information exchanged between
-	  C and AS in the PoP token request profile for IoT.
-	  <list style="symbols">
-	    <t>Allow the client to indicate preferences for the communication
-	    security protocol.</t>
-	    <t>Defined the term "Client Information" for the additional
-	    information returned to the client in addition to the access
-	    token.</t>
-	    <t>Require that the messages between AS and client are secured,
-	    either with (D)TLS or with COSE_Encrypted wrappers.</t>
-	    <t>Removed dependency on OSCoAP and added generic text about
-	    object security instead.</t>
-	    <t>Defined the "rpk" parameter in the client information to  
-	    transmit the raw public key of the RS from AS to client.</t>
-	    <t>(D)TLS MUST use the PoP key in the handshake (either as
-	    PSK or as client RPK with client authentication).</t>
-	    <t>Defined the use of x5c, x5t and x5tS256 parameters when a
-	    client certificate is used for proof of possession.</t>
-	    <t>Defined "tktn" parameter for signaling for how to tranfer the
-	    access token.</t>
-	  </list></t>
-	  <t>Added 5.2. the CoAP Access-Token option for transfering access
-	  tokens in messages that do not have payload.</t>
-	  <t>5.3.2. Defined success and error responses from the RS when
-	  receiving an access token.</t>
-	  <t>5.6.:Added section giving guidance on how to handle token
-	  expiration in the absence of reliable time.</t>
-	  <t>Appendix B Added list of roles and responsibilities for C, AS and
-	  RS.</t>
-	</list></t>
-      </section>
-    </section>
+<section anchor="app:changelog" title="Document Updates">
+  <section anchor="app:f1t2" title="Version -00 to -01">
+    <t><list style="symbols">
+      <t>Changed 5.1. from "Communication Security Protocol" to "Client
+      Information".</t> 
+      <t>Major rewrite of 5.1 to clarify the information exchanged between
+      C and AS in the PoP token request profile for IoT.
+      <list style="symbols">
+	<t>Allow the client to indicate preferences for the communication
+	security protocol.</t>
+	<t>Defined the term "Client Information" for the additional
+	information returned to the client in addition to the access
+	token.</t>
+	<t>Require that the messages between AS and client are secured,
+	either with (D)TLS or with COSE_Encrypted wrappers.</t>
+	<t>Removed dependency on OSCoAP and added generic text about
+	object security instead.</t>
+	<t>Defined the "rpk" parameter in the client information to  
+	transmit the raw public key of the RS from AS to client.</t>
+	<t>(D)TLS MUST use the PoP key in the handshake (either as
+	PSK or as client RPK with client authentication).</t>
+	<t>Defined the use of x5c, x5t and x5tS256 parameters when a
+	client certificate is used for proof of possession.</t>
+	<t>Defined "tktn" parameter for signaling for how to tranfer the
+	access token.</t>
+      </list></t>
+      <t>Added 5.2. the CoAP Access-Token option for transfering access
+      tokens in messages that do not have payload.</t>
+      <t>5.3.2. Defined success and error responses from the RS when
+      receiving an access token.</t>
+      <t>5.6.:Added section giving guidance on how to handle token
+      expiration in the absence of reliable time.</t>
+      <t>Appendix B Added list of roles and responsibilities for C, AS and
+      RS.</t>
+    </list></t>
+  </section>
+  <section anchor="app:f2t3" title="Version -01 to -02">
+    <t><list style="symbols">
+      <t>Moved the deployment examples to the appendix.</t>
+      <t>Removed most of the specific profiling (e.g. for CoAP, CBOR and
+      COSE and rewrote this as a pure framework document</t>
+    </list></t>
+  </section>
+</section>
   </back>
 </rfc>
