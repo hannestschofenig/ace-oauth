@@ -5,14 +5,14 @@
 ACE Working Group                                               L. Seitz
 Internet-Draft                                                 RISE SICS
 Intended status: Standards Track                             G. Selander
-Expires: September 20, 2018                                     Ericsson
+Expires: November 3, 2018                                       Ericsson
                                                            E. Wahlstroem
 
                                                               S. Erdtman
                                                               Spotify AB
                                                            H. Tschofenig
                                                                 ARM Ltd.
-                                                          March 19, 2018
+                                                             May 2, 2018
 
 
   Authentication and Authorization for Constrained Environments (ACE)
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 20, 2018.
+   This Internet-Draft will expire on November 3, 2018.
 
 
 
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 1]
+Seitz, et al.           Expires November 3, 2018                [Page 1]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 Copyright Notice
@@ -97,7 +97,7 @@ Table of Contents
          5.6.4.1.  Audience  . . . . . . . . . . . . . . . . . . . .  26
          5.6.4.2.  Grant Type  . . . . . . . . . . . . . . . . . . .  26
          5.6.4.3.  Token Type  . . . . . . . . . . . . . . . . . . .  26
-         5.6.4.4.  Profile . . . . . . . . . . . . . . . . . . . . .  27
+         5.6.4.4.  Profile . . . . . . . . . . . . . . . . . . . . .  26
          5.6.4.5.  Confirmation  . . . . . . . . . . . . . . . . . .  27
        5.6.5.  Mapping Parameters to CBOR  . . . . . . . . . . . . .  27
      5.7.  The 'Introspect' Endpoint . . . . . . . . . . . . . . . .  28
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 2]
+Seitz, et al.           Expires November 3, 2018                [Page 2]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
        5.8.1.  The 'Authorization Information' Endpoint  . . . . . .  32
@@ -165,9 +165,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 3]
+Seitz, et al.           Expires November 3, 2018                [Page 3]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 1.  Introduction
@@ -221,9 +221,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 4]
+Seitz, et al.           Expires November 3, 2018                [Page 4]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 2.  Terminology
@@ -277,9 +277,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 5]
+Seitz, et al.           Expires November 3, 2018                [Page 5]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    The basic block is the OAuth 2.0 [RFC6749] framework, which enjoys
@@ -333,9 +333,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 6]
+Seitz, et al.           Expires November 3, 2018                [Page 6]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 3.1.  OAuth 2.0
@@ -389,15 +389,15 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 7]
+Seitz, et al.           Expires November 3, 2018                [Page 7]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       verify that the key used by the client matches the one bound to
       the access token.  When this specification uses the term "access
-      token" it is assumed to be a PoP access token token unless
-      specifically stated otherwise.
+      token" it is assumed to be a PoP access token unless specifically
+      stated otherwise.
 
       The key bound to the access token (the PoP key) may use either
       symmetric or asymmetric cryptography.  The appropriate choice of
@@ -438,16 +438,16 @@ Internet-Draft                  ACE-OAuth                     March 2018
       request.  In turn, the AS may use the scope response parameter to
       inform the client of the scope of the access token issued.  As the
       client could be a constrained device as well, this specification
-      uses CBOR encoding as data format, defined in Section 5, to
-      request scopes and to be informed what scopes the access token
-      actually authorizes.
+      proposes the use of CBOR encoding as alternative data format to
+      JSON, as defined in Section 5, for requesting scopes and to be
+      informed what scopes the access token actually authorizes.
 
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 8]
+Seitz, et al.           Expires November 3, 2018                [Page 8]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       The values of the scope parameter in OAuth 2.0 are expressed as a
@@ -501,9 +501,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018               [Page 9]
+Seitz, et al.           Expires November 3, 2018                [Page 9]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    Transport layer security for CoAP can be provided by DTLS 1.2
@@ -557,9 +557,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 10]
+Seitz, et al.           Expires November 3, 2018               [Page 10]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    The consent of the resource owner, for giving a client access to a
@@ -613,9 +613,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 11]
+Seitz, et al.           Expires November 3, 2018               [Page 11]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    +--------+                               +---------------+
@@ -669,9 +669,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 12]
+Seitz, et al.           Expires November 3, 2018               [Page 12]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       Depending on the device limitations and the selected protocol,
@@ -725,9 +725,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 13]
+Seitz, et al.           Expires November 3, 2018               [Page 13]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 5.  Framework
@@ -781,24 +781,25 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 14]
+Seitz, et al.           Expires November 3, 2018               [Page 14]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    In OAuth 2.0 the communication with the Token and the Introspection
    endpoints at the AS is assumed to be via HTTP and may use Uri-query
-   parameters.  This framework RECOMMENDS to use CoAP instead and
-   RECOMMENDS the use of the following alternative instead of Uri-query
-   parameters: The sender (client or RS) encodes the parameters of its
-   request as a CBOR map and submits that map as the payload of the POST
-   request.  The Content-format depends on the security applied to the
-   content and MUST be specified by the profile that is used.
+   parameters.  This framework specifies the equivalent use of CoAP for
+   constrained devices, with the following alternative instead of Uri-
+   query parameters: The sender (client or RS) encodes the parameters of
+   its request as a CBOR map and submits that map as the payload of the
+   POST request.  The Content-format depends on the security applied to
+   the content and MUST be specified by the profile that is used.
 
    The OAuth 2.0 AS uses a JSON structure in the payload of its
-   responses both to client and RS.  This framework REQUIRES the use of
-   CBOR [RFC7049] instead.  Depending on the profile, the CBOR payload
-   MAY be enclosed in a non-CBOR cryptographic wrapper.
+   responses both to client and RS.  This framework defines the
+   equivalent use of CBOR [RFC7049] as an alternative.  Profiles of this
+   framework MUST specify what encoding is expected for conformance to
+   the specific profile.
 
 5.1.  Discovering Authorization Servers
 
@@ -836,10 +837,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-
-Seitz, et al.          Expires September 20, 2018              [Page 15]
+Seitz, et al.           Expires November 3, 2018               [Page 15]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    proper AS Information to enable the Client to request an access token
@@ -893,9 +893,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 16]
+Seitz, et al.           Expires November 3, 2018               [Page 16]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
        4.01 Unauthorized
@@ -949,9 +949,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 17]
+Seitz, et al.           Expires November 3, 2018               [Page 17]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    grant is recommended.  If the client acts on behalf of the resource
@@ -1005,9 +1005,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 18]
+Seitz, et al.           Expires November 3, 2018               [Page 18]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    If clients involved cannot support HTTP and TLS, profiles MAY define
@@ -1049,30 +1049,29 @@ Internet-Draft                  ACE-OAuth                     March 2018
 5.6.1.  Client-to-AS Request
 
    The client sends a POST request to the token endpoint at the AS.  The
-   profile MUST specify the Content-Type and wrapping of the payload.
-   The content of the request consists of the parameters specified in
-   Section 4 of the OAuth 2.0 specification [RFC6749].
+   profile MUST specify the Content-Type and crytographic protectiong of
+   the payload.  The content of the request consists of the parameters
+   specified in Section 4 of the OAuth 2.0 specification [RFC6749], with
+   additional parameters specified below.
 
-   If CBOR is used then this parameter is encoded as a CBOR map, where
-   the "scope" parameter can additionally be formatted as a byte array,
-   in order to allow compact encoding of complex scope structures.
-
-
-
-
-
-Seitz, et al.          Expires September 20, 2018              [Page 19]
-
-Internet-Draft                  ACE-OAuth                     March 2018
-
+   If CBOR is used then these parameters are encoded as a CBOR map.
 
    When HTTP is used as a transport then the client makes a request to
    the token endpoint by sending the parameters using the "application/
-   x-www-form-urlencoded" format with a character encoding of UTF-8 in
-   the HTTP request entity-body, as defined in RFC 6749.
 
-   In addition to these parameters, this framework defines the following
-   parameters for requesting an access token from a token endpoint:
+
+
+Seitz, et al.           Expires November 3, 2018               [Page 19]
+
+Internet-Draft                  ACE-OAuth                       May 2018
+
+
+   x-www-form-urlencoded" format with a character encoding of UTF-8 in
+   the HTTP request entity-body, as defined in [RFC6749].
+
+   In addition to the parameters specified in OAuth 2.0, this framework
+   defines the following parameters for requesting an access token from
+   a token endpoint:
 
    aud:
       OPTIONAL.  Specifies the audience for which the client is
@@ -1117,9 +1116,10 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 20]
+
+Seitz, et al.           Expires November 3, 2018               [Page 20]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    Header: POST (Code=0.02)
@@ -1173,9 +1173,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 21]
+Seitz, et al.           Expires November 3, 2018               [Page 21]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    Figure 7 shows a request for a token where a previously communicated
@@ -1229,9 +1229,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 22]
+Seitz, et al.           Expires November 3, 2018               [Page 22]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    profile:
@@ -1285,9 +1285,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 23]
+Seitz, et al.           Expires November 3, 2018               [Page 23]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
            /-------------------+-----------------\
@@ -1341,9 +1341,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 24]
+Seitz, et al.           Expires November 3, 2018               [Page 24]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 5.6.3.  Error Response
@@ -1353,9 +1353,7 @@ Internet-Draft                  ACE-OAuth                     March 2018
    Section 5.2 of [RFC6749], with the following differences:
 
    o  The Content-Type MUST be specified by the communication security
-      profile used between client and AS.  The raw payload before being
-      processed by the communication security protocol MUST be encoded
-      as a CBOR map.
+      profile used between client and AS.
    o  A response code equivalent to the CoAP code 4.00 (Bad Request)
       MUST be used for all error responses, except for invalid_client
       where a response code equivalent to the CoAP code 4.01
@@ -1393,17 +1391,16 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
    This section provides more detail about the new parameters that can
    be used in access token requests and responses, as well as
-
-
-
-
-Seitz, et al.          Expires September 20, 2018              [Page 25]
-
-Internet-Draft                  ACE-OAuth                     March 2018
-
-
    abbreviations for more compact encoding of existing parameters and
    common parameter values.
+
+
+
+
+Seitz, et al.           Expires November 3, 2018               [Page 25]
+
+Internet-Draft                  ACE-OAuth                       May 2018
+
 
 5.6.4.1.  Audience
 
@@ -1447,22 +1444,20 @@ Internet-Draft                  ACE-OAuth                     March 2018
    In this framework token type "pop" MUST be assumed by default if the
    AS does not provide a different value.
 
-
-
-
-
-
-
-Seitz, et al.          Expires September 20, 2018              [Page 26]
-
-Internet-Draft                  ACE-OAuth                     March 2018
-
-
 5.6.4.4.  Profile
 
    Profiles of this framework MUST define the communication protocol and
    the communication security protocol between the client and the RS.
    The security protocol MUST provide encryption, integrity and replay
+
+
+
+
+Seitz, et al.           Expires November 3, 2018               [Page 26]
+
+Internet-Draft                  ACE-OAuth                       May 2018
+
+
    protection.  Furthermore profiles MUST define proof-of-possession
    methods, if they support proof-of-possession tokens.
 
@@ -1503,19 +1498,21 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 5.6.5.  Mapping Parameters to CBOR
 
-   All OAuth parameters in access token requests and responses MUST be
-   mapped to CBOR types as specified in Figure 12, using the given
-   integer abbreviation for the key, if a CBOR encoding is used.
-
-
-
-Seitz, et al.          Expires September 20, 2018              [Page 27]
-
-Internet-Draft                  ACE-OAuth                     March 2018
-
+   If CBOR is used as encoding format, all OAuth parameters in access
+   token requests and responses MUST be mapped to CBOR types as
+   specified in Figure 12, using the given integer abbreviation for the
+   key.
 
    Note that we have aligned these abbreviations with the claim
    abbreviations defined in [I-D.ietf-ace-cbor-web-token].
+
+
+
+
+Seitz, et al.           Expires November 3, 2018               [Page 27]
+
+Internet-Draft                  ACE-OAuth                       May 2018
+
 
            /-------------------+----------+---------------------\
            | Name              | CBOR Key | Value Type          |
@@ -1565,9 +1562,12 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 28]
+
+
+
+Seitz, et al.           Expires November 3, 2018               [Page 28]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    The default name of this endpoint in an url-path is 'introspect',
@@ -1585,11 +1585,11 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
    The RS sends a POST request to the introspection endpoint at the AS,
    the profile MUST specify the Content-Type and wrapping of the
-   payload.  The payload MUST be encoded as a CBOR map with a "token"
-   parameter containing either the access token or a reference to the
-   token (e.g., the cti).  Further optional parameters representing
-   additional context that is known by the RS to aid the AS in its
-   response MAY be included.
+   payload.  The payload is encoded as a map with a "token" parameter
+   containing either the access token or a reference to the token (e.g.,
+   the cti).  Further optional parameters representing additional
+   context that is known by the RS to aid the AS in its response MAY be
+   included.
 
    The same parameters are required and optional as in Section 2.1 of
    RFC 7662 [RFC7662].
@@ -1621,14 +1621,14 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 29]
+Seitz, et al.           Expires November 3, 2018               [Page 29]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    In a successful response, the AS encodes the response parameters in a
-   CBOR map including with the same required and optional parameters as
-   in Section 2.2. of RFC 7662 [RFC7662] with the following additions:
+   map including the same required and optional parameters as in
+   Section 2.2. of RFC 7662 [RFC7662] with the following additions:
 
    cnf  OPTIONAL.  This field contains information about the proof-of-
       possession key that binds the client to the access token.  See
@@ -1667,23 +1667,21 @@ Internet-Draft                  ACE-OAuth                     March 2018
    Section 2.3 of [RFC7662], with the following differences:
 
    o  If content is sent, the Content-Type MUST be set according to the
-      specification of the communication security profile, and the
-      content payload MUST be encoded as a CBOR map.
+      specification of the communication security profile.
    o  If the credentials used by the RS are invalid the AS MUST respond
       with the response code equivalent to the CoAP code 4.01
       (Unauthorized) and use the required and optional parameters from
       Section 5.2 in RFC 6749 [RFC6749].
-
-
-
-
-Seitz, et al.          Expires September 20, 2018              [Page 30]
-
-Internet-Draft                  ACE-OAuth                     March 2018
-
-
    o  If the RS does not have the right to perform this introspection
       request, the AS MUST respond with a response code equivalent to
+
+
+
+Seitz, et al.           Expires November 3, 2018               [Page 30]
+
+Internet-Draft                  ACE-OAuth                       May 2018
+
+
       the CoAP code 4.03 (Forbidden).  In this case no payload is
       returned.
    o  The parameters "error", "error_description" and "error_uri" MUST
@@ -1699,9 +1697,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 5.7.4.  Mapping Introspection parameters to CBOR
 
-   The introspection request and response parameters MUST be mapped to
-   CBOR types as specified in Figure 15, using the given integer
-   abbreviation for the key.
+   If introspection uses CBOR as dataformat, the request and response
+   parameters MUST be mapped to CBOR types as specified in Figure 15,
+   using the given integer abbreviation for the key.
 
    Note that we have aligned these abbreviations with the claim
    abbreviations defined in [I-D.ietf-ace-cbor-web-token].
@@ -1733,15 +1731,17 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 31]
+
+
+Seitz, et al.           Expires November 3, 2018               [Page 31]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 5.8.  The Access Token
 
    This framework RECOMMENDS the use of CBOR web token (CWT) as
-   specified in [I-D.ietf-ace-cbor-web-token].
+   specified in [I-D.ietf-ace-cbor-web-token] for constrained use cases.
 
    In order to facilitate offline processing of access tokens, this
    draft uses the "cnf" claim from
@@ -1789,9 +1789,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 32]
+Seitz, et al.           Expires November 3, 2018               [Page 32]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    with a response code equivalent to the CoAP code 4.00 (Bad Request).
@@ -1845,9 +1845,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 33]
+Seitz, et al.           Expires November 3, 2018               [Page 33]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    If a token that authorizes a long running request such as a CoAP
@@ -1901,9 +1901,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 34]
+Seitz, et al.           Expires November 3, 2018               [Page 34]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    this is a real risk with many constrained environments, since
@@ -1957,9 +1957,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 35]
+Seitz, et al.           Expires November 3, 2018               [Page 35]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 6.4.  Error responses
@@ -2013,9 +2013,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 36]
+Seitz, et al.           Expires November 3, 2018               [Page 36]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    provide C with sufficient information to react on that particular
@@ -2069,9 +2069,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 37]
+Seitz, et al.           Expires November 3, 2018               [Page 37]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    Reference  This contains a pointer to the public specification of the
@@ -2125,9 +2125,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 38]
+Seitz, et al.           Expires November 3, 2018               [Page 38]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    CBOR Value  The unsigned integer value abbreviating this access token
@@ -2181,9 +2181,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 39]
+Seitz, et al.           Expires November 3, 2018               [Page 39]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    o  Name: "aud"
@@ -2237,9 +2237,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 40]
+Seitz, et al.           Expires November 3, 2018               [Page 40]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 8.9.  OAuth Introspection Response Parameter Registration
@@ -2293,9 +2293,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 41]
+Seitz, et al.           Expires November 3, 2018               [Page 41]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    o  Change Controller: IESG
@@ -2349,9 +2349,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 42]
+Seitz, et al.           Expires November 3, 2018               [Page 42]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    Ludwig Seitz and Goeran Selander worked on this document as part of
@@ -2363,7 +2363,7 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
    [I-D.ietf-ace-cbor-web-token]
               Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
-              "CBOR Web Token (CWT)", draft-ietf-ace-cbor-web-token-14
+              "CBOR Web Token (CWT)", draft-ietf-ace-cbor-web-token-15
               (work in progress), March 2018.
 
    [I-D.ietf-ace-cwt-proof-of-possession]
@@ -2405,9 +2405,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 43]
+Seitz, et al.           Expires November 3, 2018               [Page 43]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    [RFC8152]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
@@ -2434,7 +2434,7 @@ Internet-Draft                  ACE-OAuth                     March 2018
    [I-D.ietf-core-object-security]
               Selander, G., Mattsson, J., Palombini, F., and L. Seitz,
               "Object Security for Constrained RESTful Environments
-              (OSCORE)", draft-ietf-core-object-security-10 (work in
+              (OSCORE)", draft-ietf-core-object-security-12 (work in
               progress), March 2018.
 
    [I-D.ietf-core-resource-directory]
@@ -2445,8 +2445,8 @@ Internet-Draft                  ACE-OAuth                     March 2018
    [I-D.ietf-oauth-device-flow]
               Denniss, W., Bradley, J., Jones, M., and H. Tschofenig,
               "OAuth 2.0 Device Flow for Browserless and Input
-              Constrained Devices", draft-ietf-oauth-device-flow-07
-              (work in progress), October 2017.
+              Constrained Devices", draft-ietf-oauth-device-flow-09
+              (work in progress), April 2018.
 
    [I-D.ietf-oauth-discovery]
               Jones, M., Sakimura, N., and J. Bradley, "OAuth 2.0
@@ -2461,9 +2461,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 44]
+Seitz, et al.           Expires November 3, 2018               [Page 44]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    [Margi10impact]
@@ -2517,9 +2517,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 45]
+Seitz, et al.           Expires November 3, 2018               [Page 45]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    [RFC7521]  Campbell, B., Mortimore, C., Jones, M., and Y. Goland,
@@ -2573,9 +2573,9 @@ Appendix A.  Design Justification
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 46]
+Seitz, et al.           Expires November 3, 2018               [Page 46]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       Many IoT devices are equipped with a small battery which needs to
@@ -2629,9 +2629,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 47]
+Seitz, et al.           Expires November 3, 2018               [Page 47]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       rich user interface does not work in many IoT deployment
@@ -2685,9 +2685,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 48]
+Seitz, et al.           Expires November 3, 2018               [Page 48]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    RS Information:
@@ -2741,9 +2741,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 49]
+Seitz, et al.           Expires November 3, 2018               [Page 49]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       This framework RECOMMENDS the use of access token introspection in
@@ -2797,9 +2797,9 @@ Appendix B.  Roles and Responsibilities
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 50]
+Seitz, et al.           Expires November 3, 2018               [Page 50]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       *  Authenticate clients that wish to request a token.
@@ -2853,9 +2853,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 51]
+Seitz, et al.           Expires November 3, 2018               [Page 51]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
          +  Verify the token is from a recognized AS.
@@ -2890,8 +2890,8 @@ Appendix C.  Requirements on Profiles
       Section 5.6.4.4
    o  Specify how the client and the RS mutually authenticate.
       Section 4
-   o  Specify the Content-format of the protocol messages (e.g.,
-      "application/cbor" or "application/cose+cbor").  Section 4
+   o  Specify the Content-format of the payload of protocol messages
+      (e.g., "application/cbor" or "application/cose+cbor").  Section 4
    o  Specify the proof-of-possession protocol(s) and how to select one,
       if several are available.  Also specify which key types (e.g.,
       symmetric/asymmetric) are supported by a specific proof-of-
@@ -2909,9 +2909,9 @@ Appendix C.  Requirements on Profiles
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 52]
+Seitz, et al.           Expires November 3, 2018               [Page 52]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 Appendix D.  Assumptions on AS knowledge about C and RS
@@ -2965,9 +2965,9 @@ E.1.  Local Token Validation
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 53]
+Seitz, et al.           Expires November 3, 2018               [Page 53]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    This example shows the interactions between a client, the
@@ -3021,9 +3021,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 54]
+Seitz, et al.           Expires November 3, 2018               [Page 54]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
             Authorization
@@ -3077,9 +3077,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 55]
+Seitz, et al.           Expires November 3, 2018               [Page 55]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    The content of the access token is shown in Figure 18.
@@ -3133,9 +3133,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 56]
+Seitz, et al.           Expires November 3, 2018               [Page 56]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       The client sends the CoAP request GET to /temperature on RS over
@@ -3189,9 +3189,9 @@ E.2.  Introspection Aided Token Validation
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 57]
+Seitz, et al.           Expires November 3, 2018               [Page 57]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    resource owner has a connected car, he buys a generic key that he
@@ -3245,9 +3245,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 58]
+Seitz, et al.           Expires November 3, 2018               [Page 58]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    Request-Payload:
@@ -3301,9 +3301,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 59]
+Seitz, et al.           Expires November 3, 2018               [Page 59]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
               Resource
@@ -3357,9 +3357,9 @@ Internet-Draft                  ACE-OAuth                     March 2018
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 60]
+Seitz, et al.           Expires November 3, 2018               [Page 60]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
       The client uses the symmetric PoP key to establish a DTLS
@@ -3413,9 +3413,9 @@ F.3.  Version -08 to -09
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 61]
+Seitz, et al.           Expires November 3, 2018               [Page 61]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    o  Added references to other document sections defining IANA entries
@@ -3469,9 +3469,9 @@ F.6.  Version -05 to -06
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 62]
+Seitz, et al.           Expires November 3, 2018               [Page 62]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 F.7.  Version -04 to -05
@@ -3525,9 +3525,9 @@ F.10.  Version -01 to -02
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 63]
+Seitz, et al.           Expires November 3, 2018               [Page 63]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
    o  Restructured section 5 to create new sections on the OAuth
@@ -3581,9 +3581,9 @@ F.11.  Version -00 to -01
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 64]
+Seitz, et al.           Expires November 3, 2018               [Page 64]
 
-Internet-Draft                  ACE-OAuth                     March 2018
+Internet-Draft                  ACE-OAuth                       May 2018
 
 
 Authors' Addresses
@@ -3637,4 +3637,4 @@ Authors' Addresses
 
 
 
-Seitz, et al.          Expires September 20, 2018              [Page 65]
+Seitz, et al.           Expires November 3, 2018               [Page 65]
